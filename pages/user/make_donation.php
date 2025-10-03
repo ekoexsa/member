@@ -1,4 +1,6 @@
 <?php
+// Logic for making a new donation.
+
 $product_id = $jumlah_donasi = "";
 $product_id_err = $jumlah_donasi_err = $file_err = "";
 $file_name = "";
@@ -15,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($jumlah_donasi) || !is_numeric($jumlah_donasi)) $jumlah_donasi_err = "Please enter a valid donation amount.";
 
     if (isset($_FILES["bukti_pembayaran"]) && $_FILES["bukti_pembayaran"]["error"] == 0) {
-        $target_dir = "../../uploads/proof/"; // Adjusted path
+        // Path is now relative to the root index.php
+        $target_dir = "uploads/proof/";
         $file_name = time() . "_" . basename($_FILES["bukti_pembayaran"]["name"]);
         $target_file = $target_dir . $file_name;
         $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
@@ -39,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt = $mysqli->prepare($sql)) {
             $stmt->bind_param("iids", $user_id, $product_id, $jumlah_donasi, $file_name);
             if ($stmt->execute()) {
-                header("location: index.php?pg=my_donations");
+                header("location: index.php?page=user_my_donations");
                 exit();
             } else {
                 echo "Something went wrong. Please try again later.";
@@ -55,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="alert alert-info">
     <strong>Payment Instructions:</strong> Please transfer the donation amount via Dana to <strong>081234567890</strong> (Example). Upload the screenshot as proof.
 </div>
-<form action="index.php?pg=make_donation" method="post" enctype="multipart/form-data">
+<form action="index.php?page=user_make_donation" method="post" enctype="multipart/form-data">
     <div class="form-group mb-3">
         <label>Product</label>
         <select name="product_id" class="form-control <?php echo (!empty($product_id_err)) ? 'is-invalid' : ''; ?>">
@@ -80,6 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Submit Donation">
-        <a href="index.php?pg=my_donations" class="btn btn-secondary">Cancel</a>
+        <a href="index.php?page=user_my_donations" class="btn btn-secondary">Cancel</a>
     </div>
 </form>

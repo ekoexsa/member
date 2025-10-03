@@ -42,18 +42,20 @@ Ini adalah aplikasi sistem member sederhana yang dibangun menggunakan PHP, MySQL
     ```
 
 4.  **Jalankan Aplikasi**
-    - Buka browser Anda dan navigasikan ke direktori proyek.
-    - Halaman login utama berada di `auth/login.php`. Contoh: `http://localhost/nama_folder_proyek/auth/login.php`
-    - Setelah login, panel admin dapat diakses melalui `admin/` dan panel pengguna melalui `user/`.
+    - Buka browser Anda dan navigasikan ke direktori root proyek Anda. Contoh: `http://localhost/nama_folder_proyek/`
+    - Aplikasi akan secara otomatis mengarahkan Anda ke halaman login jika Anda belum masuk.
 
-## Struktur Navigasi
+## Arsitektur & Struktur Navigasi
 
-Aplikasi ini sekarang menggunakan sistem routing berbasis parameter GET (`?pg=...`) untuk navigasi di dalam panel admin dan pengguna.
+Aplikasi ini menggunakan arsitektur **Front Controller**, di mana semua permintaan ditangani oleh satu file `index.php` di direktori root. Navigasi dikontrol oleh parameter URL `?page=...`.
 
--   **Panel Admin**: `admin/index.php?pg=[nama_halaman]`
--   **Panel Pengguna**: `user/index.php?pg=[nama_halaman]`
+Beberapa contoh URL:
+-   **Login**: `index.php?page=login`
+-   **Register**: `index.php?page=register`
+-   **Admin Dashboard**: `index.php?page=admin_dashboard`
+-   **User Dashboard**: `index.php?page=user_dashboard`
 
-Ini membuat struktur lebih terpusat dan aman.
+Arsitektur ini meningkatkan keamanan, konsistensi, dan kemudahan pemeliharaan kode.
 
 ## Akun Demo
 

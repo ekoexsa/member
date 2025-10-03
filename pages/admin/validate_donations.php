@@ -36,15 +36,17 @@ if(isset($_SESSION['message'])){
                     <td>Rp <?php echo number_format($row['jumlah_donasi'], 2, ',', '.'); ?></td>
                     <td>
                         <?php if($row['bukti_pembayaran']): ?>
-                            <a href="../uploads/proof/<?php echo $row['bukti_pembayaran']; ?>" target="_blank">View Proof</a>
+                            <!-- Path is now relative to the root index.php -->
+                            <a href="uploads/proof/<?php echo $row['bukti_pembayaran']; ?>" target="_blank">View Proof</a>
                         <?php else: ?>
                             N/A
                         <?php endif; ?>
                     </td>
                     <td><?php echo $row['created_at']; ?></td>
                     <td>
-                        <a href="index.php?pg=update_donation_status&id=<?php echo $row['id']; ?>&status=validated" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to validate this donation?');">Validate</a>
-                        <a href="index.php?pg=update_donation_status&id=<?php echo $row['id']; ?>&status=rejected" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to reject this donation?');">Reject</a>
+                        <!-- Links now point to the main router with the correct page key -->
+                        <a href="index.php?page=admin_update_donation_status&id=<?php echo $row['id']; ?>&status=validated" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to validate this donation?');">Validate</a>
+                        <a href="index.php?page=admin_update_donation_status&id=<?php echo $row['id']; ?>&status=rejected" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to reject this donation?');">Reject</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

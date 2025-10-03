@@ -1,4 +1,6 @@
 <?php
+// Logic for editing a pending donation.
+
 $jumlah_donasi = $product_info = "";
 $jumlah_donasi_err = $file_err = "";
 $donation_id = 0;
@@ -20,7 +22,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $jumlah_donasi = $row['jumlah_donasi'];
                 $product_info = htmlspecialchars($row['nama_produk']) . " (Min. Donation: Rp " . number_format($row['harga_donasi'], 2, ',', '.') . ")";
             } else {
-                header("location: index.php?pg=my_donations");
+                header("location: index.php?page=user_my_donations");
                 exit();
             }
         } else {
@@ -30,7 +32,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         $stmt->close();
     }
 } else {
-    header("location: index.php?pg=my_donations");
+    header("location: index.php?page=user_my_donations");
     exit();
 }
 
@@ -42,10 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $file_name = "";
     if (isset($_FILES["bukti_pembayaran"]) && $_FILES["bukti_pembayaran"]["error"] == 0) {
-        $target_dir = "../../uploads/proof/";
+        $target_dir = "uploads/proof/";
         $file_name = time() . "_" . basename($_FILES["bukti_pembayaran"]["name"]);
         $target_file = $target_dir . $file_name;
-        // ... (add file validation logic)
+
         if (!move_uploaded_file($_FILES["bukti_pembayaran"]["tmp_name"], $target_file)) {
             $file_err = "Sorry, there was an error uploading your new file.";
         }
@@ -63,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if ($stmt->execute()) {
-            header("location: index.php?pg=my_donations");
+            header("location: index.php?page=user_my_donations");
             exit();
         } else {
             echo "Something went wrong. Please try again later.";
@@ -74,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <h2>Edit Donation</h2>
-<form action="index.php?pg=edit_donation&id=<?php echo $donation_id; ?>" method="post" enctype="multipart/form-data">
+<form action="index.php?page=user_edit_donation&id=<?php echo $donation_id; ?>" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo $donation_id; ?>"/>
     <div class="form-group mb-3">
         <label>Product</label>
@@ -93,6 +95,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Update Donation">
-        <a href="index.php?pg=my_donations" class="btn btn-secondary">Cancel</a>
+        <a href="index.php?page=user_my_donations" class="btn btn-secondary">Cancel</a>
     </div>
 </form>

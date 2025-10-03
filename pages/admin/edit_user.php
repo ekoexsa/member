@@ -1,11 +1,15 @@
 <?php
+// Logic for editing member details.
+
 $username = $nama_lengkap = "";
 $username_err = $nama_lengkap_err = $password_err = "";
 $user_id = 0;
 
+// Get user ID from URL
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     $user_id = trim($_GET["id"]);
 
+    // Fetch user data
     $sql = "SELECT username, nama_lengkap FROM users WHERE id = ?";
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("i", $param_id);
@@ -18,7 +22,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 $username = $row['username'];
                 $nama_lengkap = $row['nama_lengkap'];
             } else {
-                echo "User not found.";
+                // User not found, redirect to manage users page
+                header("location: index.php?page=admin_manage_users");
                 exit();
             }
         } else {
@@ -27,11 +32,12 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         $stmt->close();
     }
 } else {
-    // If no ID, redirect to manage users page
-    header("location: index.php?pg=manage_users");
+    // If no ID is in the URL, redirect
+    header("location: index.php?page=admin_manage_users");
     exit();
 }
 
+// Process form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_POST['id'];
 
@@ -85,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             if($stmt->execute()){
-                header("location: index.php?pg=manage_users");
+                header("location: index.php?page=admin_manage_users");
                 exit();
             } else{
                 echo "Something went wrong. Please try again later.";
@@ -98,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Edit Member</h2>
 <p>Update member details.</p>
-<form action="index.php?pg=edit_user&id=<?php echo $user_id; ?>" method="post">
+<form action="index.php?page=admin_edit_user&id=<?php echo $user_id; ?>" method="post">
     <input type="hidden" name="id" value="<?php echo $user_id; ?>"/>
     <div class="form-group mb-3">
         <label>Username</label>
@@ -117,6 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Update">
-        <a href="index.php?pg=manage_users" class="btn btn-secondary">Cancel</a>
+        <a href="index.php?page=admin_manage_users" class="btn btn-secondary">Cancel</a>
     </div>
 </form>

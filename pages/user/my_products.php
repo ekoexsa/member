@@ -23,7 +23,7 @@ $result = $stmt->get_result();
             <div class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1"><?php echo htmlspecialchars($row['nama_produk']); ?></h5>
-                    <a href="index.php?pg=download_product&id=<?php echo $row['id']; ?>" class="btn btn-success">Download</a>
+                    <a href="index.php?page=user_download_product&id=<?php echo $row['id']; ?>" class="btn btn-success">Download</a>
                 </div>
                 <p class="mb-1"><?php echo htmlspecialchars($row['deskripsi']); ?></p>
             </div>

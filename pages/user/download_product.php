@@ -1,4 +1,6 @@
 <?php
+// Processing script for downloading a product.
+
 if (isset($_GET['id']) && !empty(trim($_GET['id']))) {
     $product_id = trim($_GET['id']);
     $user_id = $_SESSION['id'];
@@ -20,7 +22,8 @@ if (isset($_GET['id']) && !empty(trim($_GET['id']))) {
 
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            $file_path = '../../uploads/' . $row['file_path']; // Adjusted path
+            // Path is now relative to the root index.php
+            $file_path = 'uploads/' . $row['file_path'];
 
             if (file_exists($file_path)) {
                 header('Content-Description: File Transfer');

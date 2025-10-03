@@ -1,16 +1,5 @@
 <?php
-session_start();
-
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    if ($_SESSION["role"] === 'admin') {
-        header("location: ../admin/dashboard.php");
-    } else {
-        header("location: ../user/dashboard.php");
-    }
-    exit;
-}
-
-require_once "../config/database.php";
+// The main index.php handles session, db connection, and checks if user is already logged in.
 
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
@@ -44,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt->bind_result($id, $username, $hashed_password, $role, $nama_lengkap);
                     if($stmt->fetch()){
                         if(password_verify($password, $hashed_password)){
-                            session_start();
+                            // Session is already started by index.php
 
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
@@ -53,10 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["nama_lengkap"] = $nama_lengkap;
 
                             if ($role === 'admin') {
-                                header("location: ../admin/dashboard.php");
+                                header("location: index.php?page=admin_dashboard");
                             } else {
-                                header("location: ../user/dashboard.php");
+                                header("location: index.php?page=user_dashboard");
                             }
+                            exit; // Important to exit after redirect
                         } else{
                             $login_err = "Invalid username or password.";
                         }
@@ -71,12 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->close();
         }
     }
-
-    $mysqli->close();
 }
 ?>
-
-<?php include '../includes/header.php'; ?>
 
 <h2>Login</h2>
 <p>Please fill in your credentials to login.</p>
@@ -87,7 +73,7 @@ if(!empty($login_err)){
 }
 ?>
 
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+<form action="index.php?page=login" method="post">
     <div class="form-group mb-3">
         <label>Username</label>
         <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
@@ -101,7 +87,5 @@ if(!empty($login_err)){
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Login">
     </div>
-    <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
+    <p>Don't have an account? <a href="index.php?page=register">Sign up now</a>.</p>
 </form>
-
-<?php include '../includes/footer.php'; ?>

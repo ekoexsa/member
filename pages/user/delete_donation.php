@@ -1,9 +1,11 @@
 <?php
+// Processing script for deleting a donation.
+
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     $donation_id = trim($_GET["id"]);
     $user_id = $_SESSION['id'];
 
-    // First, get the file path to delete the file from server
+    // First, get the file path to delete the physical file
     $sql_select = "SELECT bukti_pembayaran FROM donations WHERE id = ? AND user_id = ? AND status = 'pending'";
     if($stmt_select = $mysqli->prepare($sql_select)){
         $stmt_select->bind_param("ii", $donation_id, $user_id);
@@ -12,14 +14,15 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             if($result->num_rows == 1){
                 $row = $result->fetch_assoc();
                 if($row['bukti_pembayaran']){
-                    $file_to_delete = "../../uploads/proof/" . $row['bukti_pembayaran']; // Adjusted path
+                    // Path is now relative to the root index.php
+                    $file_to_delete = "uploads/proof/" . $row['bukti_pembayaran'];
                     if(file_exists($file_to_delete)){
-                        unlink($file_to_delete); // Delete the file
+                        unlink($file_to_delete);
                     }
                 }
             } else {
                 // If donation not found or not pending, just redirect
-                header("location: index.php?pg=my_donations");
+                header("location: index.php?page=user_my_donations");
                 exit();
             }
         }
@@ -33,7 +36,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         $stmt_delete->bind_param("ii", $donation_id, $user_id);
 
         if($stmt_delete->execute()){
-            header("location: index.php?pg=my_donations");
+            header("location: index.php?page=user_my_donations");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -43,7 +46,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     $stmt_delete->close();
 
 } else{
-    header("location: index.php?pg=my_donations");
+    header("location: index.php?page=user_my_donations");
     exit();
 }
 ?>

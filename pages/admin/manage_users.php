@@ -1,10 +1,11 @@
 <?php
+// The main index.php handles boilerplate.
 // Fetch all members
 $result = $mysqli->query("SELECT id, username, nama_lengkap, created_at FROM users WHERE role = 'member' ORDER BY created_at DESC");
 ?>
 
 <h2>Manage Users</h2>
-<a href="index.php?pg=add_user" class="btn btn-success mb-3">Add New Member</a>
+<a href="index.php?page=admin_add_user" class="btn btn-success mb-3">Add New Member</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -22,8 +23,8 @@ $result = $mysqli->query("SELECT id, username, nama_lengkap, created_at FROM use
                     <td><?php echo htmlspecialchars($row['nama_lengkap']); ?></td>
                     <td><?php echo $row['created_at']; ?></td>
                     <td>
-                        <a href="index.php?pg=edit_user&id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="index.php?pg=delete_user&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                        <a href="index.php?page=admin_edit_user&id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="index.php?page=admin_delete_user&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     </td>
                 </tr>
             <?php endwhile; ?>

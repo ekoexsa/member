@@ -1,4 +1,7 @@
 <?php
+// Logic for adding a new user.
+// Boilerplate is handled by the main index.php.
+
 $username = $password = $confirm_password = $nama_lengkap = "";
 $username_err = $password_err = $confirm_password_err = $nama_lengkap_err = "";
 
@@ -55,8 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_password = password_hash($password, PASSWORD_DEFAULT);
 
             if($stmt->execute()){
-                // Redirect to the manage users page
-                header("location: index.php?pg=manage_users");
+                // Redirect to the manage users page using the main router
+                header("location: index.php?page=admin_manage_users");
                 exit;
             } else{
                 echo "Something went wrong. Please try again later.";
@@ -70,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Add New Member</h2>
 <p>Fill out the form to add a new member.</p>
-<form action="index.php?pg=add_user" method="post">
+<form action="index.php?page=admin_add_user" method="post">
     <div class="form-group mb-3">
         <label>Username</label>
         <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
@@ -88,6 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary" value="Submit">
-        <a href="index.php?pg=manage_users" class="btn btn-secondary">Cancel</a>
+        <a href="index.php?page=admin_manage_users" class="btn btn-secondary">Cancel</a>
     </div>
 </form>

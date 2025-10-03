@@ -1,6 +1,5 @@
 <?php
-require_once "../config/database.php";
-require_once "../includes/functions.php";
+// The main index.php handles session, db connection, and functions.
 
 $username = $password = $confirm_password = $nama_lengkap = "";
 $username_err = $password_err = $confirm_password_err = $nama_lengkap_err = "";
@@ -11,14 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username_err = "Please enter a username.";
     } else{
         $sql = "SELECT id FROM users WHERE username = ?";
-
         if($stmt = $mysqli->prepare($sql)){
             $stmt->bind_param("s", $param_username);
             $param_username = trim($_POST["username"]);
-
             if($stmt->execute()){
                 $stmt->store_result();
-
                 if($stmt->num_rows == 1){
                     $username_err = "This username is already taken.";
                 } else{
@@ -27,7 +23,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
-
             $stmt->close();
         }
     }
@@ -41,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";
     } elseif(strlen(trim($_POST["password"])) < 6){
-        $password_err = "Password must have atleast 6 characters.";
+        $password_err = "Password must have at least 6 characters.";
     } else{
         $password = trim($_POST["password"]);
     }
@@ -67,24 +62,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_password = password_hash($password, PASSWORD_DEFAULT);
 
             if($stmt->execute()){
-                header("location: login.php");
+                header("location: index.php?page=login");
+                exit;
             } else{
                 echo "Something went wrong. Please try again later.";
             }
-
             $stmt->close();
         }
     }
-
-    $mysqli->close();
 }
 ?>
 
-<?php include '../includes/header.php'; ?>
-
 <h2>Register</h2>
 <p>Please fill this form to create an account.</p>
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+<form action="index.php?page=register" method="post">
     <div class="form-group mb-3">
         <label>Username</label>
         <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
@@ -109,7 +100,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="submit" class="btn btn-primary" value="Submit">
         <input type="reset" class="btn btn-secondary" value="Reset">
     </div>
-    <p>Already have an account? <a href="login.php">Login here</a>.</p>
+    <p>Already have an account? <a href="index.php?page=login">Login here</a>.</p>
 </form>
-
-<?php include '../includes/footer.php'; ?>

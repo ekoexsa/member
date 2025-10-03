@@ -15,7 +15,7 @@ $result = $stmt->get_result();
 ?>
 
 <h2>My Donations</h2>
-<a href="index.php?pg=make_donation" class="btn btn-success mb-3">Make a New Donation</a>
+<a href="index.php?page=user_make_donation" class="btn btn-success mb-3">Make a New Donation</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -44,8 +44,8 @@ $result = $stmt->get_result();
                     <td><?php echo $row['created_at']; ?></td>
                     <td>
                         <?php if($row['status'] == 'pending'): ?>
-                            <a href="index.php?pg=edit_donation&id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
-                            <a href="index.php?pg=delete_donation&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
+                            <a href="index.php?page=user_edit_donation&id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="index.php?page=user_delete_donation&id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">Delete</a>
                         <?php else: ?>
                             -
                         <?php endif; ?>

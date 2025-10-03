@@ -1,8 +1,10 @@
 <?php
+// Processing script for deleting a product.
+
 if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     $product_id = trim($_GET["id"]);
 
-    // First, get the file path to delete the file from server
+    // First, get the file path to delete the physical file from the server
     $sql_select = "SELECT file_path FROM products WHERE id = ?";
     if($stmt_select = $mysqli->prepare($sql_select)){
         $stmt_select->bind_param("i", $product_id);
@@ -10,7 +12,8 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             $result = $stmt_select->get_result();
             if($result->num_rows == 1){
                 $row = $result->fetch_assoc();
-                $file_to_delete = "../../uploads/" . $row['file_path']; // Adjusted path
+                // Path is now relative to the root index.php
+                $file_to_delete = "uploads/" . $row['file_path'];
                 if(file_exists($file_to_delete)){
                     unlink($file_to_delete); // Delete the file
                 }
@@ -26,7 +29,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
         $stmt_delete->bind_param("i", $product_id);
 
         if($stmt_delete->execute()){
-            header("location: index.php?pg=manage_products");
+            header("location: index.php?page=admin_manage_products");
             exit();
         } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -36,7 +39,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     $stmt_delete->close();
 
 } else{
-    header("location: index.php?pg=manage_products");
+    header("location: index.php?page=admin_manage_products");
     exit();
 }
 ?>

@@ -38,6 +38,6 @@ $pending_donations = $mysqli->query("SELECT COUNT(id) as count FROM donations WH
 </div>
 <div class="mt-4">
     <h4>Quick Actions</h4>
-    <a href="index.php?pg=make_donation" class="btn btn-primary">Make a New Donation</a>
-    <a href="index.php?pg=my_donations" class="btn btn-secondary">View My Donations</a>
+    <a href="index.php?page=user_make_donation" class="btn btn-primary">Make a New Donation</a>
+    <a href="index.php?page=user_my_donations" class="btn btn-secondary">View My Donations</a>
 </div>
